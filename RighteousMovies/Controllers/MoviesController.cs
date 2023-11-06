@@ -19,43 +19,15 @@ namespace RighteousMovies.Controllers
             _context = context;
         }
 
-        // GET: Movies
-        // GET: Movies
-        //public async Task<IActionResult> Index(string movieGenre, string searchString, string sortOrder)
-
+        //ADDED FOR GENRE IN CREATE*********************************************
+        //public class MovieCreateViewModel
         //{
-        //    ViewData["DateSortParam"] = string.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
-        //    ViewData["TitleSortParam"] = sortOrder == "Title" ? "title_desc" : "Title";
-
-        //    if (_context.Movie == null)
-        //    {
-        //        return Problem("Entity set 'RighteousMoviesContext.Movie'  is null.");
-        //    }
-
-        //    // Use LINQ to get list of genres.
-        //    IQueryable<string> genreQuery = from m in _context.Movie
-        //                                    orderby m.Genre
-        //                                    select m.Genre;
-        //    var movies = from m in _context.Movie
-        //                 select m;
-
-        //    if (!string.IsNullOrEmpty(searchString))
-        //    {
-        //        movies = movies.Where(s => s.Title!.Contains(searchString));
-        //    }
-
-        //    if (!string.IsNullOrEmpty(movieGenre))
-        //    {
-        //        movies = movies.Where(x => x.Genre == movieGenre);
-        //    }
-        //    var movieGenreVM = new MovieGenreViewModel
-        //    {
-        //        Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
-        //        Movies = await movies.ToListAsync()
-        //    };
-
-        //    return View(movieGenreVM);
+        //    public Movie Movie { get; set; } = default;
+        //    public SelectList GenreOptions { get; set; }
         //}
+
+
+        // GET: Movies
         public async Task<IActionResult> Index(string movieGenre, string searchString, string sortOrder)
         {
             // Use LINQ to get list of genres.
@@ -118,7 +90,16 @@ namespace RighteousMovies.Controllers
         // GET: Movies/Create
         public IActionResult Create()
         {
+            //ADDED FOR GENRE LIST
+            var genres = _context.Movie.Select(m => m.Genre).Distinct().ToList();
+
+            // Create a SelectList for genres
+            SelectList genreList = new SelectList(genres);
+
+            ViewData["GenreList"] = genreList;
+
             return View();
+            //return View();
         }
 
         // POST: Movies/Create
@@ -134,6 +115,10 @@ namespace RighteousMovies.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            var genres = _context.Movie.Select(m => m.Genre).Distinct().ToList();
+            SelectList genreList = new SelectList(genres);
+            ViewData["GenreList"] = genreList;
+
             return View(movie);
         }
 

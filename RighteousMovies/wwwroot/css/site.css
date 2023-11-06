@@ -17,8 +17,18 @@ html {
   min-height: 100%;
 }
 
+
 body {
   margin-bottom: 60px;
   background-color: cornflowerblue;
   color:antiquewhite;
+}
+
+td{
+    color:antiquewhite;
+}
+
+a{
+    color:goldenrod;
+    
 }
